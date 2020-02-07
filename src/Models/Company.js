@@ -6,25 +6,49 @@ class Company {
     this.employeesList = [];
   }
 
+  // _personOnceWasEmployee(person){
+
+  // }
+
   hire(person) {
-    const newEmployee = new Employee(person, this);
-    this.employeesList.push(newEmployee);
+    if (this._containsActiveEmployee(person) == false) {
+      const newEmployee = new Employee(person, this);
+      this.employeesList.push(newEmployee);
+    } else throw new Error("Repeted CPF");
   }
 
-  _find(person) {
+  _getEmployee(person){
+    return this.employees().filter(iterableEmployee => iterableEmployee.person.cpf == person.cpf)
+  }
+
+  _findActiveEmployee(person) {
     for (let i = 0; i < this.employeesList.length; i++) {
-      if (this.employeesList[i].person.name === person.name) {
+      if (
+        this.employeesList[i].person.cpf === person.cpf &&
+        this.employeesList[i].isActive()
+      ) {
         return this.employeesList[i];
       }
     }
   }
 
-  _contains(person) {
-    return !!this._find(person);
+  _findInactiveEmployee(person) {
+    for (let i = 0; i < this.employeesList.length; i++) {
+      if (
+        this.employeesList[i].person.cpf === person.cpf &&
+        this.employeesList[i].isInactive()
+      ) {
+        return this.employeesList[i];
+      }
+    }
+  }
+
+  _containsActiveEmployee(person) {
+    return !!this._findActiveEmployee(person);
   }
 
   dismiss(person) {
-    const employee = this._find(person);
+    const employee = this._findActiveEmployee(person);
 
     typeof employee == "undefined"
       ? new Error("Employee not found")
@@ -32,15 +56,15 @@ class Company {
   }
 
   employees() {
-    return this.employeesList;
+    return this.employeesList.filter(iterableEmployee =>
+      iterableEmployee.isActive()
+    );
   }
 
   printEmployees() {
     this.employees().forEach((employee, index) => {
-      console.log("TCL: Company -> printEmployees -> employee", employee);
-
       console.log(
-        `Employee nº${index + 1}: Name:${employee.name} - Status:${
+        `Employee nº${index + 1}: Name:${employee.person.name} - Status:${
           employee.status
         } `
       );
@@ -48,7 +72,7 @@ class Company {
   }
 
   countEmployees() {
-    console.log(`Employees quantity: ${this.employeesList.length}`);
+    return this.employees().length;
   }
 }
 

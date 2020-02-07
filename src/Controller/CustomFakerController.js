@@ -1,8 +1,14 @@
 const faker = require("faker");
+const cpf = require("cpf");
 
-class Faker {
+class CustomFaker {
   constructor() {
     this.faker = faker;
+    this.cpf = cpf;
+  }
+
+  randomCPF() {
+    return this.cpf.generate();
   }
 
   randomFullName() {
@@ -18,4 +24,4 @@ class Faker {
   }
 }
 
-module.exports = Faker;
+module.exports = CustomFaker;
