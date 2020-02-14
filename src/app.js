@@ -16,12 +16,17 @@ const newPerson2 = new Person(
 );
 
 const newCompany = new Company(newCustomFaker.randomCompanyName());
-newCompany.hire(newPerson);
-newCompany.hire(newPerson2);
-newCompany.dismiss(newPerson);
-newCompany.hire(newPerson);
-newCompany.printEmployees();
-// newCompany.printEmployees();
+
+  newCompany.hire(newPerson);
+  newCompany.hire(newPerson2);
+  newCompany.dismiss(newPerson);
+
+  newCompany.printEmployees();
+
+  newCompany.hire(newPerson);
+  newCompany.printEmployees();
+
+  // newCompany.printEmployees();
 // newCompany.countEmployees();
 
 // const Employee = require("./Models/Employee");

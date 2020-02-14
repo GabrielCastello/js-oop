@@ -6,53 +6,31 @@ class Company {
     this.employeesList = [];
   }
 
-  // _personOnceWasEmployee(person){
-
-  // }
-
   hire(person) {
-    if (this._containsActiveEmployee(person) == false) {
+    if (this.isEmployee(person) == false) {
       const newEmployee = new Employee(person, this);
       this.employeesList.push(newEmployee);
     } else throw new Error("Repeted CPF");
   }
 
-  _getEmployee(person){
-    return this.employees().filter(iterableEmployee => iterableEmployee.person.cpf == person.cpf)
+  isEmployee(person){    
+    return this.employee(person) == null ? false : true;
   }
 
-  _findActiveEmployee(person) {
-    for (let i = 0; i < this.employeesList.length; i++) {
-      if (
-        this.employeesList[i].person.cpf === person.cpf &&
-        this.employeesList[i].isActive()
-      ) {
-        return this.employeesList[i];
-      }
-    }
-  }
-
-  _findInactiveEmployee(person) {
-    for (let i = 0; i < this.employeesList.length; i++) {
-      if (
-        this.employeesList[i].person.cpf === person.cpf &&
-        this.employeesList[i].isInactive()
-      ) {
-        return this.employeesList[i];
-      }
-    }
-  }
-
-  _containsActiveEmployee(person) {
-    return !!this._findActiveEmployee(person);
+  employee(person) {
+    
+    const employees = this.employees().filter(iterableEmployee => iterableEmployee.person.cpf == person.cpf && iterableEmployee.isActive() )
+    
+    return employees.length == 1 ? employees[0] : null;
   }
 
   dismiss(person) {
-    const employee = this._findActiveEmployee(person);
+    const employee = this.employee(person);
 
-    typeof employee == "undefined"
-      ? new Error("Employee not found")
-      : employee.changeToInactive();
+    if(!employee)
+      throw new Error("Employee not found");
+    else 
+      employee.changeToInactive();
   }
 
   employees() {
